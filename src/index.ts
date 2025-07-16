@@ -91,8 +91,8 @@ export class Validation implements FormValidation {
       Object.keys(rules).forEach((rule) => {
         if (typeof rules[rule]?.validator !== 'function')
           throw new Error(`${rule} must be a function.`);
-        if (typeof rules[rule]?.message !== 'string')
-          throw new Error(`${rule} message must be a string.`);
+        if (typeof rules[rule]?.message !== 'string' && typeof rules[rule]?.message !== 'function')
+          throw new Error(`${rule} message must be a string or a function.`);
 
         this.addMethod(rule, rules[rule].validator, rules[rule].message);
       });
@@ -674,7 +674,7 @@ export class Validation implements FormValidation {
    * Adds a rule to a field.
    * @param {string} fieldName - Name of the field to add rule to
    * @param {string} ruleName - Name of the rule to add to the field
-   * @param {string} [message] - Custom message for the rule
+   * @param {Message} [message] - Custom message for the rule
    */
   addFieldRule(fieldName: string, ruleName: string, message?: Message) {
     const field = this.form.querySelector(
